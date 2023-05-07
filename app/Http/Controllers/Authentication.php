@@ -3,14 +3,18 @@
 namespace app\Http\Controllers;
 
 use app\Http\Requests\AuthRequest;
+use app\Repository\AuthRepositoryImpl;
 use app\Services\AuthService;
 
 class Authentication
 {
     private AuthService $authService;
+
+    private AuthRepositoryImpl $authRepositoryImpl;
     public function __construct()
     {
         $this->authService = new AuthService();
+        $this->authRepositoryImpl = new AuthRepositoryImpl();
     }
 
     /**
@@ -27,9 +31,8 @@ class Authentication
      */
     public function auth(): void
     {
-        $authRequest = new AuthRequest($_POST['username'], $_POST['password']);
-        $user = $this->authService->auth($authRequest);
-        if(!$user)
+        $user = $this->authRepositoryImpl->getUserByUsernameAndPassword(new AuthRequest($_POST['username'], $_POST['password']));
+        if(empty($user->getId()))
         {
             $_REQUEST['failureMessage'] = 'username or password invalid!';
             $this->view();

@@ -2,9 +2,10 @@
     $failureMessage= $_REQUEST['failureMessage'];
 ?>
 
+<!DOCTYPE html>
 <html lang="en-Us">
     <head>
-        <title>Form</title>
+        <title>Login</title>
     </head>
     <body>
         <?php if (isset($failureMessage)):?>

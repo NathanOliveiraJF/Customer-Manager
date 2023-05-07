@@ -2,23 +2,24 @@
 
 namespace app\Http\Middleware;
 
-use app\Repository\AuthRepository;
+use app\Http\Models\User;
+use app\Repository\AuthRepositoryImpl;
 
 class EnsureTokenIsValid
 {
     private $authRepository;
     public function __construct()
     {
-        $this->authRepository = new AuthRepository();
+        $this->authRepository = new AuthRepositoryImpl();
     }
 
-    public function handle($request): void
+    public function handle(string $token): User
     {
-       $user = $this->authRepository->getUserByToken($request['token']);
-
-       if(!$user) {
-           require_once './resources/views/home.php';
-           exit;
-       }
+        try {
+            return $this->authRepository->getUserByToken($token);
+        } catch (\PDOException $e) {
+            error_log('user not found '.$e);
+            return new User();
+        }
     }
 }
