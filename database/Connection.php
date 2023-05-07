@@ -10,8 +10,8 @@ class Connection
     public function __construct()
     {
         $dsn = 'mysql:host=localhost;dbname=Jwt_log';
-        $user = '';
-        $password = '';
+        $user = 'root';
+        $password = '32237130';
         try {
             $this->connection = new PDO($dsn, $user, $password);
         } catch (PDOException $e) {

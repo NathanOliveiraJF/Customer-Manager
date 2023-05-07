@@ -19,8 +19,12 @@ class CustomerController
      */
     public function viewCustomers(): void
     {
+        if(!isset($_SESSION['user'])) {
+            require_once './resources/views/home.php';
+            exit;
+        }
        $user = $this->ensureTokenIsValid->handle($_SESSION['user']->getToken());
-       if(empty($user->getId())) {
+       if(empty($user->getId()) ) {
         require_once './resources/views/home.php';
         exit;
        }
