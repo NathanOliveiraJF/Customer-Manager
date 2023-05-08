@@ -5,6 +5,7 @@ namespace app\Http\Controllers;
 use app\Http\Requests\AuthRequest;
 use app\Repository\AuthRepositoryImpl;
 use app\Services\AuthService;
+use Twig\Environment;
 
 class Authentication
 {
@@ -31,13 +32,14 @@ class Authentication
      */
     public function auth(): void
     {
-        $user = $this->authRepositoryImpl->getUserByUsernameAndPassword(new AuthRequest($_POST['username'], $_POST['password']));
+        $user = $this->authRepositoryImpl->getUserByUsernameAndPassword(new AuthRequest(input('username'), input('password')));
         if(empty($user->getId()))
         {
             $_REQUEST['failureMessage'] = 'username or password invalid!';
-            $this->view();
+            response()->redirect('/login');
+            return;
         }
         $_SESSION['user'] = $user;
-        header('Location: http://localhost:8000/customers', true, 301);
+        response()->redirect('/customers');
     }
 }

@@ -2,24 +2,27 @@
 
 namespace app\Http\Middleware;
 
-use app\Http\Models\User;
 use app\Repository\AuthRepositoryImpl;
+use Pecee\Http\Middleware\IMiddleware;
+use Pecee\Http\Request;
 
-class EnsureTokenIsValid
+class EnsureTokenIsValid implements IMiddleware
 {
-    private $authRepository;
+    private AuthRepositoryImpl $authRepository;
     public function __construct()
     {
         $this->authRepository = new AuthRepositoryImpl();
     }
 
-    public function handle(string $token): User
+    public function handle(Request $request): void
     {
-        try {
-            return $this->authRepository->getUserByToken($token);
-        } catch (\PDOException $e) {
-            error_log('user not found '.$e);
-            return new User();
+        if(!isset($_SESSION['user'])) {
+            $request->setRewriteUrl(url('user.login'));
+            return;
         }
+       $user =  $this->authRepository->getUserByToken($_SESSION['user']->getToken());
+       if(empty($user->getId())) {
+           $request->setRewriteUrl(url('user.login'));
+       }
     }
 }
