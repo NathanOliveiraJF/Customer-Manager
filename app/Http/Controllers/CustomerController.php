@@ -25,4 +25,10 @@ class CustomerController
         require_once "./resources/views/customers/index.php";
         exit;
     }
+
+    public function postCustomer(): void
+    {
+        require_once "./resources/views/customers/create.php";
+        exit;
+    }
 }
