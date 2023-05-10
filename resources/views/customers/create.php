@@ -6,7 +6,7 @@
 <body>
 
 <form action="/customers" method="post">
-    <input name="name" placeholder="name" required/>
+    <input name="username" placeholder="name" required/>
     <input name="lastname" placeholder="lastname" required/>
     <input type="date" name="birth" placeholder="birth" required/>
     <input type="submit" value="create customer">

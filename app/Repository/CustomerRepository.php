@@ -2,21 +2,10 @@
 
 namespace app\Repository;
 
+use app\Http\Requests\CustomerRequest;
 
-use app\Dao\implements\CustomerDaoImp;
-use app\Http\Models\Customer;
-
-class CustomerRepository
+interface CustomerRepository
 {
-    private CustomerDaoImp $customerDaoImp;
-
-    public function __construct()
-    {
-        $this->customerDaoImp = new CustomerDaoImp();
-    }
-
-    public function getAllCustomers(): array
-    {
-        return $this->customerDaoImp->findAll();
-    }
+    function getAll(): array;
+    function create(CustomerRequest $customerRequest): void;
 }
