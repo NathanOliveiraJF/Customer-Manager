@@ -5,6 +5,7 @@ namespace app\Http\Controllers;
 use app\Http\Requests\AuthRequest;
 use app\Repository\AuthRepositoryImpl;
 use app\Services\AuthService;
+use Couchbase\AuthenticationException;
 use Twig\Environment;
 
 class Authentication
@@ -32,14 +33,14 @@ class Authentication
      */
     public function auth(): void
     {
-        $user = $this->authRepositoryImpl->getUserByUsernameAndPassword(new AuthRequest(input('username'), input('password')));
-        if(empty($user->getId()))
-        {
-            $_REQUEST['failureMessage'] = 'username or password invalid!';
-            response()->redirect('/login');
-            return;
+        try {
+            $user = $this->authRepositoryImpl->authenticateUser(input("username"), input("username"));
+            $_SESSION['user'] = $user;
+            redirect("/customers");
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            $_SESSION["failureMessage"] = $e->getMessage();
+            redirect("/login");
         }
-        $_SESSION['user'] = $user;
-        response()->redirect('/customers');
     }
 }

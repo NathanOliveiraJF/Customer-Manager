@@ -6,6 +6,7 @@ use app\Dao\implements\UserDaoImp;
 use app\Http\Models\User;
 use app\Http\Requests\AuthRequest;
 use app\Services\AuthService;
+use Couchbase\AuthenticationException;
 
 class AuthRepositoryImpl implements AuthRepository
 {
@@ -17,7 +18,6 @@ class AuthRepositoryImpl implements AuthRepository
         $this->authService = new AuthService();
     }
 
-    // Return user with token and updated
     public function getUserByUsernameAndPassword(AuthRequest $authRequest): User
     {
         try {
@@ -40,5 +40,17 @@ class AuthRepositoryImpl implements AuthRepository
     public function updateTokenUserById($id,$token): void
     {
         $this->updateTokenUserById($id, $token);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function authenticateUser(string $username, string $password): User
+    {
+        $user = $this->getUserByUsernameAndPassword(new AuthRequest(input('username'), input('password')));
+        if(empty($user->getId())) {
+            throw new \Exception("Invalid username or password!");
+        }
+        return $user;
     }
 }

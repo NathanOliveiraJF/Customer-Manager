@@ -1,5 +1,5 @@
 <?php
-    $failureMessage= $_REQUEST['failureMessage'];
+    $failureMessage=$_SESSION['failureMessage'];
 ?>
 
 <!DOCTYPE html>

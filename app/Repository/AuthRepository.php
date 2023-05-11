@@ -12,4 +12,6 @@ interface AuthRepository
     public function getUserByToken($token): User;
 
     public function updateTokenUserById($id,$token): void;
+
+    public function authenticateUser(string $username, string $password): User;
 }
