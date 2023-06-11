@@ -31,6 +31,25 @@ class CustomerDaoImp implements CustomerDaoInterface
         return $customers;
     }
 
+    /**
+     * @param $id
+     * @return CustomerRequest
+     */
+    public function findById($id): CustomerRequest
+    {
+        $sql = "SELECT * FROM customers WHERE id = :id";
+        $stmt = $this->connection->getConnection()->prepare($sql);
+        $stmt->execute([
+            ":id" => $id
+        ]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, CustomerRequest::class);
+        $customers = $stmt->fetch();
+        if(!$customers) {
+            throw new \PDOException("user not found");
+        }
+        return $customers;
+    }
+
     function insert(CustomerRequest $customerRequest): void
     {
         $sql = "INSERT INTO customers (name, lastname, birth) VALUES (?, ?, ?)";

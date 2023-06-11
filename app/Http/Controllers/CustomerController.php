@@ -6,6 +6,7 @@ use app\Http\Middleware\EnsureTokenIsValid;
 use app\Http\Models\User;
 use app\Http\Requests\CustomerRequest;
 use app\Repository\CustomerRepositoryImp;
+use http\Params;
 use JetBrains\PhpStorm\NoReturn;
 
 class CustomerController
@@ -38,5 +39,12 @@ class CustomerController
         var_dump(input()->all());
         $this->customerRepository->create(new CustomerRequest(input('username'), input('lastname'), input('birth')));
         redirect('/customers');
+    }
+
+    public function viewCustomerEdit($request): void
+    {
+        $_REQUEST['user'] = $this->customerRepository->getById($request);
+        require_once "./resources/views/customers/edit.php";
+        exit;
     }
 }

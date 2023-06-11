@@ -12,4 +12,5 @@ SimpleRouter::group(['middleware' => \app\Http\Middleware\EnsureTokenIsValid::cl
     SimpleRouter::get('/customers', [CustomerController::class, 'viewCustomers'])->name('customers.index');
     SimpleRouter::get('/customers/create', [CustomerController::class, 'viewNewCustomer'])->name('customers.create');
     SimpleRouter::post('/customers', [CustomerController::class, 'postCustomer'])->name('customers.store');
+    SimpleRouter::get('/customers/{customer}', [CustomerController::class, 'viewCustomerEdit'])->name('customers.edit');
 });
